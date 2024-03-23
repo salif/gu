@@ -3,8 +3,12 @@ version = "1.0.0"
 
 description = "Zenity GUI dialogs Gleam wrapper"
 licences = ["Apache-2.0"]
-repository = { type = "github", user = "salif", repo = "gu" }
-links = [{ title = "Website", href = "https://github.com/salif/gu" }]
+links = [{title = "Website", href = "https://github.com/salif/gu"}]
+repository = {type = "github", user = "salif", repo = "gu"}
+
+internal_modules = [
+  "examples/*"
+]
 
 [dependencies]
 gleam_stdlib = "~> 0.34 or ~> 1.0"

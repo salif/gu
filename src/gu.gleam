@@ -1,4 +1,5 @@
 import shellout
+import gleam/int
 import gleam/string
 import gleam/list
 import gleam/option.{type Option, None, Some}
@@ -6,16 +7,16 @@ import gleam/option.{type Option, None, Some}
 // v4.0.1
 pub const zenity: List(String) = ["zenity"]
 
-pub fn help_all(cmd: List(String)) -> List(String) {
-   ["--help-all", ..cmd]
+pub fn help_all(command: List(String)) -> List(String) {
+   ["--help-all", ..command]
 }
 
-pub fn about(cmd: List(String)) -> List(String) {
-   ["--about", ..cmd]
+pub fn about(command: List(String)) -> List(String) {
+   ["--about", ..command]
 }
 
-pub fn version(cmd: List(String)) -> List(String) {
-   ["--version", ..cmd]
+pub fn version(command: List(String)) -> List(String) {
+   ["--version", ..command]
 }
 
 pub fn set_text(command: List(String), text: String) -> List(String) {
@@ -26,16 +27,16 @@ pub fn set_title(command: List(String), title: String) -> List(String) {
    add_opt(command, Some(title), "title")
 }
 
-pub fn set_width(command: List(String), width: String) -> List(String) {
-   add_opt(command, Some(width), "width")
+pub fn set_width(command: List(String), width: Int) -> List(String) {
+   add_opt(command, Some(int.to_string(width)), "width")
 }
 
-pub fn set_height(command: List(String), height: String) -> List(String) {
-   add_opt(command, Some(height), "height")
+pub fn set_height(command: List(String), height: Int) -> List(String) {
+   add_opt(command, Some(int.to_string(height)), "height")
 }
 
-pub fn set_timeout(command: List(String), timeout: String) -> List(String) {
-   add_opt(command, Some(timeout), "timeout")
+pub fn set_timeout(command: List(String), timeout: Int) -> List(String) {
+   add_opt(command, Some(int.to_string(timeout)), "timeout")
 }
 
 pub fn set_ok_label(command: List(String), ok_label: String) -> List(String) {
@@ -46,12 +47,12 @@ pub fn set_cancel_label(command: List(String), cancel_label: String) -> List(Str
    add_opt(command, Some(cancel_label), "cancel-label")
 }
 
-pub fn set_extra_button(command: List(String), extra_button: String) -> List(String) {
+pub fn add_extra_button(command: List(String), extra_button: String) -> List(String) {
    add_opt(command, Some(extra_button), "extra-button")
 }
 
-pub fn set_modal(command: List(String), modal: Bool) -> List(String) {
-   add_bool(command, modal, "modal")
+pub fn set_modal(command: List(String)) -> List(String) {
+   ["--modal", ..command]
 }
 
 pub const type_error: String = "--error"
@@ -97,16 +98,16 @@ pub fn new_message_opts(
 pub fn new_calendar(
    command: List(String),
    text text: Option(String),
-   day day: Option(String),
-   month month: Option(String),
-   year year: Option(String),
+   day day: Option(Int),
+   month month: Option(Int),
+   year year: Option(Int),
    date_format date_format: Option(String),
 ) -> List(String) {
    ["--calendar", ..command]
    |> add_opt(text, "text")
-   |> add_opt(day, "day")
-   |> add_opt(month, "month")
-   |> add_opt(year, "year")
+   |> add_opt_int(day, "day")
+   |> add_opt_int(month, "month")
+   |> add_opt_int(year, "year")
    |> add_opt(date_format, "date-format")
 }
 
@@ -153,7 +154,7 @@ pub fn new_list_opts(
    multiple multiple: Bool,
    editable editable: Bool,
    print_column print_column: Option(String),
-   hide_column hide_column: Option(String),
+   hide_column hide_column: Option(Int),
    hide_header hide_header: Bool,
 ) -> List(String) {
    command
@@ -164,7 +165,7 @@ pub fn new_list_opts(
    |> add_bool(multiple, "multiple")
    |> add_bool(editable, "editable")
    |> add_opt(print_column, "print-column")
-   |> add_opt(hide_column, "hide-column")
+   |> add_opt_int(hide_column, "hide-column")
    |> add_bool(hide_header, "hide-header")
 }
 
@@ -173,7 +174,9 @@ pub fn add_column(command: List(String), column: String) -> List(String) {
 }
 
 pub fn add_row(command: List(String), row: List(String)) -> List(String) {
-   [string.join(row, " "), ..command]
+   row
+   |> list.reverse()
+   |> list.append(command)
 }
 
 pub fn new_notification(
@@ -222,19 +225,19 @@ pub fn new_question_opts(
 pub fn new_scale(
    command: List(String),
    text text: Option(String),
-   value value: Option(String),
-   min_value min_value: Option(String),
-   max_value max_value: Option(String),
-   step step: Option(String),
+   value value: Option(Int),
+   min_value min_value: Option(Int),
+   max_value max_value: Option(Int),
+   step step: Option(Int),
    print_partial print_partial: Bool,
    hide_value hide_value: Bool,
 ) -> List(String) {
    ["--scale", ..command]
    |> add_opt(text, "text")
-   |> add_opt(value, "value")
-   |> add_opt(min_value, "min-value")
-   |> add_opt(max_value, "max-value")
-   |> add_opt(step, "step")
+   |> add_opt_int(value, "value")
+   |> add_opt_int(min_value, "min-value")
+   |> add_opt_int(max_value, "max-value")
+   |> add_opt_int(step, "step")
    |> add_bool(print_partial, "print-partial")
    |> add_bool(hide_value, "hide-value")
 }
@@ -265,12 +268,12 @@ pub fn new_color_selection(
    |> add_bool(show_palette, "show-palette")
 }
 
-pub fn new_password(command: List(String), username username: Option(String)) -> List(String) {
+pub fn new_password(command: List(String), username username: Bool) -> List(String) {
    ["--password", ..command]
-   |> add_opt(username, "username")
+   |> add_bool(username, "username")
 }
 
-pub fn new_form(command: List(String)) -> List(String) {
+pub fn new_forms(command: List(String)) -> List(String) {
    ["--forms", ..command]
 }
 
@@ -312,36 +315,47 @@ pub fn set_separator(command: List(String), separator: String) -> List(String) {
    add_opt(command, Some(separator), "separator")
 }
 
-pub fn set_show_header(command: List(String), show_header: Bool) -> List(String) {
-   add_bool(command, show_header, "show-header")
+pub fn set_show_header(command: List(String)) -> List(String) {
+   ["--show-header", ..command]
 }
 
 pub fn set_forms_date_format(command: List(String), format: String) -> List(String) {
    add_opt(command, Some(format), "forms-date-format")
 }
 
-pub fn add_value(cmd: List(String), value: String) -> List(String) {
-   [value, ..cmd]
+pub fn add_value(command: List(String), value: String) -> List(String) {
+   [value, ..command]
 }
 
-pub fn add_opt(cmd: List(String), opt: Option(String), str: String) -> List(String) {
+pub fn add_opt(command: List(String), opt: Option(String), str: String) -> List(String) {
    case opt {
-      Some(val) -> ["--" <> str <> "=" <> val, ..cmd]
-      None -> cmd
+      Some(val) -> ["--" <> str <> "=" <> val, ..command]
+      None -> command
    }
 }
 
-pub fn add_opt_list(cmd: List(String), opt_list: Option(List(String)), str: String) -> List(String) {
+pub fn add_opt_int(command: List(String), opt: Option(Int), str: String) -> List(String) {
+   case opt {
+      Some(val) -> ["--" <> str <> "=" <> int.to_string(val), ..command]
+      None -> command
+   }
+}
+
+pub fn add_opt_list(
+   command: List(String),
+   opt_list: Option(List(String)),
+   str: String,
+) -> List(String) {
    case opt_list {
-      Some(val) -> ["--" <> str <> "=" <> string.join(val, "|"), ..cmd]
-      None -> cmd
+      Some(val) -> ["--" <> str <> "=" <> string.join(val, "|"), ..command]
+      None -> command
    }
 }
 
-pub fn add_bool(cmd: List(String), opt: Bool, str: String) -> List(String) {
+pub fn add_bool(command: List(String), opt: Bool, str: String) -> List(String) {
    case opt {
-      True -> ["--" <> str, ..cmd]
-      False -> cmd
+      True -> ["--" <> str, ..command]
+      False -> command
    }
 }
 
@@ -362,8 +376,8 @@ pub fn run(command: List(String), errors errors: Bool) -> Option(#(Int, String))
       False -> [shellout.LetBeStderr]
    }
    case list.reverse(command) {
-      [cmd, ..with] ->
-         case shellout.command(run: cmd, with: with, in: ".", opt: opts) {
+      [run, ..with] ->
+         case shellout.command(run: run, with: with, in: ".", opt: opts) {
             Ok(val) -> Some(#(0, val))
             Error(err) ->
                case errors {
