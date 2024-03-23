@@ -1,5 +1,5 @@
 name = "gu"
-version = "1.0.0"
+version = "2.0.0"
 
 description = "Zenity GUI dialogs Gleam wrapper"
 licences = ["Apache-2.0"]
