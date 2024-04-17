@@ -1,8 +1,8 @@
-import shellout
 import gleam/int
-import gleam/string
 import gleam/list
 import gleam/option.{type Option, None, Some}
+import gleam/string
+import shellout
 
 // v4.0.1
 pub const zenity: List(String) = ["zenity"]

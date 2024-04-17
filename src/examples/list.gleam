@@ -1,6 +1,6 @@
-import gu
 import gleam/option.{None, Some}
 import gleam/string
+import gu
 
 pub fn main() {
    let answer =

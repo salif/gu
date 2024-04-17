@@ -1,5 +1,5 @@
-import gu
 import examples/konst as k
+import gu
 
 pub fn main() {
    gu.zenity

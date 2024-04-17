@@ -1,6 +1,6 @@
-import gu
 import examples/konst as k
 import gleam/option.{None, Some}
+import gu
 
 pub fn main() {
    gu.zenity

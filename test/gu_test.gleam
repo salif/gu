@@ -1,6 +1,6 @@
-import gu
 import gleeunit
 import gleeunit/should
+import gu
 
 pub fn main() {
    gleeunit.main()

@@ -32,7 +32,7 @@ pub fn main() {
 }
 ```
 
-![screenshot][1]
+![][1]
 
 ## Examples
 
