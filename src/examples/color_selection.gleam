@@ -1,4 +1,4 @@
-import gleam/option.{None, Some}
+import gleam/option.{None}
 import gu
 
 pub fn main() {
@@ -6,16 +6,16 @@ pub fn main() {
       gu.zenity
       |> gu.new_color_selection(color: None, show_palette: False)
       |> gu.set_title("Color Selection")
-      |> gu.run(False)
+      |> gu.show(err: False)
 
    let answer = case answer {
-      Some(#(_, val)) -> gu.parse(val)
-      None -> "No color selected"
+      Ok(val) -> gu.parse(val)
+      Error(_) -> "No color selected"
    }
 
    gu.zenity
    |> gu.new_info()
    |> gu.set_text(answer)
    |> gu.set_timeout(10)
-   |> gu.run(False)
+   |> gu.show(True)
 }

@@ -14,18 +14,18 @@ pub fn main() {
          file_filter: Some(["*.gleam"]),
       )
       |> gu.set_title("Select Gleam Files")
-      |> gu.run(False)
+      |> gu.show(err: False)
 
    let answer = case answer {
-      Some(#(_, val)) ->
+      Ok(val) ->
          gu.parse_list(val, "|")
          |> string.join(",\n")
-      None -> "No files selected"
+      Error(_) -> "No files selected"
    }
 
    gu.zenity
    |> gu.new_info()
    |> gu.set_text(answer)
    |> gu.set_timeout(10)
-   |> gu.run(False)
+   |> gu.show(True)
 }

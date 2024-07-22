@@ -1,4 +1,4 @@
-import gleam/option.{None, Some}
+import gleam/option.{None}
 import gu
 
 pub fn main() {
@@ -12,17 +12,18 @@ pub fn main() {
          auto_scroll: False,
       )
       |> gu.set_title("Text Info")
-      |> gu.run(False)
+      |> gu.show(err: False)
 
    case answer {
-      Some(#(_, val)) -> {
-         gu.zenity
-         |> gu.new_info()
-         |> gu.set_text(gu.parse(val))
-         |> gu.set_timeout(10)
-         |> gu.run(False)
+      Ok(val) -> {
+         let _ =
+            gu.zenity
+            |> gu.new_info()
+            |> gu.set_text(gu.parse(val))
+            |> gu.set_timeout(10)
+            |> gu.show(True)
          Nil
       }
-      None -> Nil
+      Error(_) -> Nil
    }
 }

@@ -7,28 +7,28 @@
 gleam add gu
 ```
 ```gleam
-import gu
 import gleam/option.{None, Some}
+import gu
 
 pub fn main() {
-   let demo = 
-         gu.zenity
-         |> gu.set_title("Demo")
-         |> gu.new_entry(
-            text: Some("What's Your Name?"),
-            entry_text: None,
-            hide_text: False,
-         )
-         |> gu.run(False)
+   let demo =
+      gu.zenity
+      |> gu.set_title("Demo")
+      |> gu.new_entry(
+         text: Some("What's Your Name?"),
+         entry_text: None,
+         hide_text: False,
+      )
+      |> gu.show(err: False)
    let name = case demo {
-      Some(#(_, val)) -> gu.parse(val)
-      None -> "Unknown"
+      Ok(val) -> gu.parse(val)
+      Error(_) -> "Unknown"
    }
    gu.zenity
    |> gu.new_info()
    |> gu.set_title("Demo")
    |> gu.set_text("Hello, " <> name <> "!")
-   |> gu.run(False)
+   |> gu.show(True)
 }
 ```
 

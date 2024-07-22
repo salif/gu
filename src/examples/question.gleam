@@ -1,5 +1,4 @@
 import examples/konst as k
-import gleam/option.{None, Some}
 import gu
 
 pub fn main() {
@@ -9,16 +8,16 @@ pub fn main() {
       |> gu.set_title("Question")
       |> gu.set_text(k.lorem_ipsum)
       |> gu.new_question_opts(default_cancel: False, switch: False)
-      |> gu.run(False)
+      |> gu.show(err: False)
 
    let answer = case answer {
-      Some(_) -> "Yes"
-      None -> "No"
+      Ok(_) -> "Yes"
+      Error(_) -> "No"
    }
 
    gu.zenity
    |> gu.new_info()
    |> gu.set_text(answer)
    |> gu.set_timeout(10)
-   |> gu.run(False)
+   |> gu.show(True)
 }

@@ -26,20 +26,21 @@ pub fn main() {
       |> gu.add_row(["Esperanto", "Unu", "Du", "Tri"])
       |> gu.add_row(["Turkish", "Bir", "İki", "Üç"])
       |> gu.add_row(["Bulgarian", "Едно", "Две", "Три"])
-      |> gu.run(False)
+      |> gu.show(err: False)
 
    case answer {
-      Some(#(_, val)) -> {
-         gu.zenity
-         |> gu.new_info()
-         |> gu.set_text(
-            gu.parse_list(val, "|")
-            |> string.join(", "),
-         )
-         |> gu.set_timeout(10)
-         |> gu.run(False)
+      Ok(val) -> {
+         let _ =
+            gu.zenity
+            |> gu.new_info()
+            |> gu.set_text(
+               gu.parse_list(val, "|")
+               |> string.join(", "),
+            )
+            |> gu.set_timeout(10)
+            |> gu.show(True)
          Nil
       }
-      None -> Nil
+      Error(_) -> Nil
    }
 }

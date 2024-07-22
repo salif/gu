@@ -14,16 +14,16 @@ pub fn main() {
          hide_value: False,
       )
       |> gu.set_title("Scale")
-      |> gu.run(False)
+      |> gu.show(err: False)
 
    let answer = case answer {
-      Some(#(_, val)) -> gu.parse(val)
-      None -> "No answer"
+      Ok(val) -> gu.parse(val)
+      Error(_) -> "No answer"
    }
 
    gu.zenity
    |> gu.new_info()
    |> gu.set_text(answer)
    |> gu.set_timeout(10)
-   |> gu.run(False)
+   |> gu.show(True)
 }

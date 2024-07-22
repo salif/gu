@@ -13,5 +13,5 @@ pub fn main() {
       no_markup: False,
       ellipsize: False,
    )
-   |> gu.run(False)
+   |> gu.show(True)
 }

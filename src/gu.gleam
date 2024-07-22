@@ -43,11 +43,17 @@ pub fn set_ok_label(command: List(String), ok_label: String) -> List(String) {
    add_opt(command, Some(ok_label), "ok-label")
 }
 
-pub fn set_cancel_label(command: List(String), cancel_label: String) -> List(String) {
+pub fn set_cancel_label(
+   command: List(String),
+   cancel_label: String,
+) -> List(String) {
    add_opt(command, Some(cancel_label), "cancel-label")
 }
 
-pub fn add_extra_button(command: List(String), extra_button: String) -> List(String) {
+pub fn add_extra_button(
+   command: List(String),
+   extra_button: String,
+) -> List(String) {
    add_opt(command, Some(extra_button), "extra-button")
 }
 
@@ -268,7 +274,10 @@ pub fn new_color_selection(
    |> add_bool(show_palette, "show-palette")
 }
 
-pub fn new_password(command: List(String), username username: Bool) -> List(String) {
+pub fn new_password(
+   command: List(String),
+   username username: Bool,
+) -> List(String) {
    ["--password", ..command]
    |> add_bool(username, "username")
 }
@@ -319,7 +328,10 @@ pub fn set_show_header(command: List(String)) -> List(String) {
    ["--show-header", ..command]
 }
 
-pub fn set_forms_date_format(command: List(String), format: String) -> List(String) {
+pub fn set_forms_date_format(
+   command: List(String),
+   format: String,
+) -> List(String) {
    add_opt(command, Some(format), "forms-date-format")
 }
 
@@ -327,14 +339,22 @@ pub fn add_value(command: List(String), value: String) -> List(String) {
    [value, ..command]
 }
 
-pub fn add_opt(command: List(String), opt: Option(String), str: String) -> List(String) {
+pub fn add_opt(
+   command: List(String),
+   opt: Option(String),
+   str: String,
+) -> List(String) {
    case opt {
       Some(val) -> ["--" <> str <> "=" <> val, ..command]
       None -> command
    }
 }
 
-pub fn add_opt_int(command: List(String), opt: Option(Int), str: String) -> List(String) {
+pub fn add_opt_int(
+   command: List(String),
+   opt: Option(Int),
+   str: String,
+) -> List(String) {
    case opt {
       Some(val) -> ["--" <> str <> "=" <> int.to_string(val), ..command]
       None -> command
@@ -370,6 +390,7 @@ pub fn parse_list(str: String, separator: String) -> List(String) {
    |> string.split(separator)
 }
 
+@deprecated("Use `show` instead.")
 pub fn run(command: List(String), errors errors: Bool) -> Option(#(Int, String)) {
    let opts = case errors {
       True -> []
@@ -386,6 +407,21 @@ pub fn run(command: List(String), errors errors: Bool) -> Option(#(Int, String))
                }
          }
       _ -> None
+   }
+}
+
+pub fn show(
+   command: List(String),
+   err capture_errors: Bool,
+) -> Result(String, #(Int, String)) {
+   let opts = case capture_errors {
+      True -> []
+      False -> [shellout.LetBeStderr]
+   }
+   case list.reverse(command) {
+      [run, ..with] ->
+         shellout.command(run: run, with: with, in: ".", opt: opts)
+      _ -> panic
    }
 }
 

@@ -6,5 +6,5 @@ pub fn main() {
    |> gu.new_info()
    |> gu.set_title("Info")
    |> gu.set_text(k.lorem_ipsum)
-   |> gu.run(False)
+   |> gu.show(True)
 }

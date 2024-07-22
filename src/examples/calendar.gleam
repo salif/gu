@@ -12,17 +12,18 @@ pub fn main() {
          date_format: None,
       )
       |> gu.set_title("Calendar")
-      |> gu.run(False)
+      |> gu.show(err: False)
 
    case answer {
-      Some(#(_, val)) -> {
-         gu.zenity
-         |> gu.new_info()
-         |> gu.set_text(gu.parse(val))
-         |> gu.set_timeout(10)
-         |> gu.run(False)
+      Ok(val) -> {
+         let _ =
+            gu.zenity
+            |> gu.new_info()
+            |> gu.set_text(gu.parse(val))
+            |> gu.set_timeout(10)
+            |> gu.show(True)
          Nil
       }
-      None -> Nil
+      Error(_) -> Nil
    }
 }
