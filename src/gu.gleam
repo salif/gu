@@ -4,6 +4,9 @@ import gleam/option.{type Option, None, Some}
 import gleam/string
 import shellout
 
+pub type GuResult =
+   Result(String, #(Int, String))
+
 // v4.0.1
 pub const zenity: List(String) = ["zenity"]
 
@@ -339,6 +342,17 @@ pub fn add_value(command: List(String), value: String) -> List(String) {
    [value, ..command]
 }
 
+pub fn add_value_if(
+   command: List(String),
+   condition: Bool,
+   value: String,
+) -> List(String) {
+   case condition {
+      True -> add_value(command, value)
+      False -> command
+   }
+}
+
 pub fn add_opt(
    command: List(String),
    opt: Option(String),
@@ -347,6 +361,18 @@ pub fn add_opt(
    case opt {
       Some(val) -> ["--" <> str <> "=" <> val, ..command]
       None -> command
+   }
+}
+
+pub fn add_opt_if(
+   command: List(String),
+   condition: Bool,
+   opt: String,
+   str: String,
+) -> List(String) {
+   case condition {
+      True -> add_opt(command, Some(opt), str)
+      False -> command
    }
 }
 
@@ -372,8 +398,12 @@ pub fn add_opt_list(
    }
 }
 
-pub fn add_bool(command: List(String), opt: Bool, str: String) -> List(String) {
-   case opt {
+pub fn add_bool(
+   command: List(String),
+   condition: Bool,
+   str: String,
+) -> List(String) {
+   case condition {
       True -> ["--" <> str, ..command]
       False -> command
    }
@@ -410,17 +440,22 @@ pub fn run(command: List(String), errors errors: Bool) -> Option(#(Int, String))
    }
 }
 
-pub fn show(
+pub fn show(command: List(String), err capture_errors: Bool) -> GuResult {
+   show_in(command, ".", capture_errors)
+}
+
+pub fn show_in(
    command: List(String),
+   in_dir: String,
    err capture_errors: Bool,
-) -> Result(String, #(Int, String)) {
+) -> GuResult {
    let opts = case capture_errors {
       True -> []
       False -> [shellout.LetBeStderr]
    }
    case list.reverse(command) {
       [run, ..with] ->
-         shellout.command(run: run, with: with, in: ".", opt: opts)
+         shellout.command(run: run, with: with, in: in_dir, opt: opts)
       _ -> panic
    }
 }

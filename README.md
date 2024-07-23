@@ -57,6 +57,8 @@ Links work on [GitHub](https://github.com/salif/gu)
 
 Further documentation can be found at <https://hexdocs.pm/gu>.
 
+gu was created for the needs of [nemo_gleam](https://github.com/salif/nemo_gleam).
+
 ## Development
 
 ```sh
