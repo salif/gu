@@ -13,16 +13,16 @@ pub fn prefix_test() {
 }
 
 pub fn parse_test() {
-   gu.parse("test\n")
+   gu.do_parse("test\n")
    |> should.equal("test")
 }
 
 pub fn parse_space_test() {
-   gu.parse("test \n")
-   |> should.equal("test")
+   gu.do_parse(" test ")
+   |> should.equal(" test ")
 }
 
-pub fn parse_list_test() {
-   gu.parse_list("a||c", "|")
-   |> should.equal(["a", "", "c"])
+pub fn parse_space_test2() {
+   gu.do_parse(" test \n")
+   |> should.equal(" test ")
 }

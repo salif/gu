@@ -1,4 +1,5 @@
 import gleam/option.{None, Some}
+import gleam/result
 import gu
 
 pub fn main() {
@@ -14,12 +15,8 @@ pub fn main() {
          hide_value: False,
       )
       |> gu.set_title("Scale")
-      |> gu.show(err: False)
-
-   let answer = case answer {
-      Ok(val) -> gu.parse(val)
-      Error(_) -> "No answer"
-   }
+      |> gu.prompt()
+      |> result.unwrap("No answer")
 
    gu.zenity
    |> gu.new_info()

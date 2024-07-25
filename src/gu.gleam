@@ -7,8 +7,12 @@ import shellout
 pub type GuResult =
    Result(String, #(Int, String))
 
-// v4.0.1
+/// zenity v4.0.1
 pub const zenity: List(String) = ["zenity"]
+
+pub fn cmd(command: List(String)) -> List(String) {
+   list.reverse(command)
+}
 
 pub fn help_all(command: List(String)) -> List(String) {
    ["--help-all", ..command]
@@ -23,41 +27,41 @@ pub fn version(command: List(String)) -> List(String) {
 }
 
 pub fn set_text(command: List(String), text: String) -> List(String) {
-   add_opt(command, Some(text), "text")
+   add_option(command, Some(text), "text")
 }
 
 pub fn set_title(command: List(String), title: String) -> List(String) {
-   add_opt(command, Some(title), "title")
+   add_option(command, Some(title), "title")
 }
 
 pub fn set_width(command: List(String), width: Int) -> List(String) {
-   add_opt(command, Some(int.to_string(width)), "width")
+   add_option(command, Some(int.to_string(width)), "width")
 }
 
 pub fn set_height(command: List(String), height: Int) -> List(String) {
-   add_opt(command, Some(int.to_string(height)), "height")
+   add_option(command, Some(int.to_string(height)), "height")
 }
 
 pub fn set_timeout(command: List(String), timeout: Int) -> List(String) {
-   add_opt(command, Some(int.to_string(timeout)), "timeout")
+   add_option(command, Some(int.to_string(timeout)), "timeout")
 }
 
 pub fn set_ok_label(command: List(String), ok_label: String) -> List(String) {
-   add_opt(command, Some(ok_label), "ok-label")
+   add_option(command, Some(ok_label), "ok-label")
 }
 
 pub fn set_cancel_label(
    command: List(String),
    cancel_label: String,
 ) -> List(String) {
-   add_opt(command, Some(cancel_label), "cancel-label")
+   add_option(command, Some(cancel_label), "cancel-label")
 }
 
 pub fn add_extra_button(
    command: List(String),
    extra_button: String,
 ) -> List(String) {
-   add_opt(command, Some(extra_button), "extra-button")
+   add_option(command, Some(extra_button), "extra-button")
 }
 
 pub fn set_modal(command: List(String)) -> List(String) {
@@ -97,11 +101,11 @@ pub fn new_message_opts(
    ellipsize ellipsize: Bool,
 ) -> List(String) {
    command
-   |> add_opt(text, "text")
-   |> add_opt(icon, "icon")
-   |> add_bool(no_wrap, "no-wrap")
-   |> add_bool(no_markup, "no-markup")
-   |> add_bool(ellipsize, "ellipsize")
+   |> add_option(text, "text")
+   |> add_option(icon, "icon")
+   |> add_option_bool(no_wrap, "no-wrap")
+   |> add_option_bool(no_markup, "no-markup")
+   |> add_option_bool(ellipsize, "ellipsize")
 }
 
 pub fn new_calendar(
@@ -113,11 +117,11 @@ pub fn new_calendar(
    date_format date_format: Option(String),
 ) -> List(String) {
    ["--calendar", ..command]
-   |> add_opt(text, "text")
-   |> add_opt_int(day, "day")
-   |> add_opt_int(month, "month")
-   |> add_opt_int(year, "year")
-   |> add_opt(date_format, "date-format")
+   |> add_option(text, "text")
+   |> add_option_int(day, "day")
+   |> add_option_int(month, "month")
+   |> add_option_int(year, "year")
+   |> add_option(date_format, "date-format")
 }
 
 pub fn new_entry(
@@ -127,9 +131,9 @@ pub fn new_entry(
    hide_text hide_text: Bool,
 ) -> List(String) {
    ["--entry", ..command]
-   |> add_opt(text, "text")
-   |> add_opt(entry_text, "entry-text")
-   |> add_bool(hide_text, "hide-text")
+   |> add_option(text, "text")
+   |> add_option(entry_text, "entry-text")
+   |> add_option_bool(hide_text, "hide-text")
 }
 
 pub fn new_file_selection(
@@ -142,12 +146,12 @@ pub fn new_file_selection(
    file_filter file_filter: Option(List(String)),
 ) -> List(String) {
    ["--file-selection", ..command]
-   |> add_opt(filename, "filename")
-   |> add_bool(multiple, "multiple")
-   |> add_bool(directory, "directory")
-   |> add_bool(save, "save")
-   |> add_opt(separator, "separator")
-   |> add_opt_list(file_filter, "file-filter")
+   |> add_option(filename, "filename")
+   |> add_option_bool(multiple, "multiple")
+   |> add_option_bool(directory, "directory")
+   |> add_option_bool(save, "save")
+   |> add_option(separator, "separator")
+   |> add_option_list(file_filter, "file-filter")
 }
 
 pub fn new_list(command: List(String)) -> List(String) {
@@ -167,19 +171,19 @@ pub fn new_list_opts(
    hide_header hide_header: Bool,
 ) -> List(String) {
    command
-   |> add_bool(checklist, "checklist")
-   |> add_bool(radiolist, "radiolist")
-   |> add_bool(imagelist, "imagelist")
-   |> add_opt(separator, "separator")
-   |> add_bool(multiple, "multiple")
-   |> add_bool(editable, "editable")
-   |> add_opt(print_column, "print-column")
-   |> add_opt_int(hide_column, "hide-column")
-   |> add_bool(hide_header, "hide-header")
+   |> add_option_bool(checklist, "checklist")
+   |> add_option_bool(radiolist, "radiolist")
+   |> add_option_bool(imagelist, "imagelist")
+   |> add_option(separator, "separator")
+   |> add_option_bool(multiple, "multiple")
+   |> add_option_bool(editable, "editable")
+   |> add_option(print_column, "print-column")
+   |> add_option_int(hide_column, "hide-column")
+   |> add_option_bool(hide_header, "hide-header")
 }
 
 pub fn add_column(command: List(String), column: String) -> List(String) {
-   add_opt(command, Some(column), "column")
+   add_option(command, Some(column), "column")
 }
 
 pub fn add_row(command: List(String), row: List(String)) -> List(String) {
@@ -195,12 +199,12 @@ pub fn new_notification(
    listen listen: Bool,
 ) -> List(String) {
    ["--notification", ..command]
-   |> add_opt(text, "text")
-   |> add_opt(icon, "icon")
-   |> add_bool(listen, "listen")
+   |> add_option(text, "text")
+   |> add_option(icon, "icon")
+   |> add_option_bool(listen, "listen")
 }
 
-// TODO: stdin
+/// TODO: stdin
 pub fn new_progress(
    command: List(String),
    text text: Option(String),
@@ -212,13 +216,13 @@ pub fn new_progress(
    time_remaining time_remaining: Bool,
 ) -> List(String) {
    ["--progress", ..command]
-   |> add_opt(text, "text")
-   |> add_opt(percentage, "percentage")
-   |> add_bool(pulsate, "pulsate")
-   |> add_bool(auto_close, "auto-close")
-   |> add_bool(auto_kill, "auto-kill")
-   |> add_bool(no_cancel, "no-cancel")
-   |> add_bool(time_remaining, "time-remaining")
+   |> add_option(text, "text")
+   |> add_option(percentage, "percentage")
+   |> add_option_bool(pulsate, "pulsate")
+   |> add_option_bool(auto_close, "auto-close")
+   |> add_option_bool(auto_kill, "auto-kill")
+   |> add_option_bool(no_cancel, "no-cancel")
+   |> add_option_bool(time_remaining, "time-remaining")
 }
 
 pub fn new_question_opts(
@@ -227,8 +231,8 @@ pub fn new_question_opts(
    switch switch: Bool,
 ) -> List(String) {
    command
-   |> add_bool(default_cancel, "default-cancel")
-   |> add_bool(switch, "switch")
+   |> add_option_bool(default_cancel, "default-cancel")
+   |> add_option_bool(switch, "switch")
 }
 
 pub fn new_scale(
@@ -242,13 +246,13 @@ pub fn new_scale(
    hide_value hide_value: Bool,
 ) -> List(String) {
    ["--scale", ..command]
-   |> add_opt(text, "text")
-   |> add_opt_int(value, "value")
-   |> add_opt_int(min_value, "min-value")
-   |> add_opt_int(max_value, "max-value")
-   |> add_opt_int(step, "step")
-   |> add_bool(print_partial, "print-partial")
-   |> add_bool(hide_value, "hide-value")
+   |> add_option(text, "text")
+   |> add_option_int(value, "value")
+   |> add_option_int(min_value, "min-value")
+   |> add_option_int(max_value, "max-value")
+   |> add_option_int(step, "step")
+   |> add_option_bool(print_partial, "print-partial")
+   |> add_option_bool(hide_value, "hide-value")
 }
 
 pub fn new_text_info(
@@ -260,11 +264,11 @@ pub fn new_text_info(
    auto_scroll auto_scroll: Bool,
 ) -> List(String) {
    ["--text-info", ..command]
-   |> add_opt(filename, "filename")
-   |> add_bool(editable, "editable")
-   |> add_opt(font, "font")
-   |> add_opt(checkbox, "checkbox")
-   |> add_bool(auto_scroll, "auto-scroll")
+   |> add_option(filename, "filename")
+   |> add_option_bool(editable, "editable")
+   |> add_option(font, "font")
+   |> add_option(checkbox, "checkbox")
+   |> add_option_bool(auto_scroll, "auto-scroll")
 }
 
 pub fn new_color_selection(
@@ -273,8 +277,8 @@ pub fn new_color_selection(
    show_palette show_palette: Bool,
 ) -> List(String) {
    ["--color-selection", ..command]
-   |> add_opt(color, "color")
-   |> add_bool(show_palette, "show-palette")
+   |> add_option(color, "color")
+   |> add_option_bool(show_palette, "show-palette")
 }
 
 pub fn new_password(
@@ -282,7 +286,7 @@ pub fn new_password(
    username username: Bool,
 ) -> List(String) {
    ["--password", ..command]
-   |> add_bool(username, "username")
+   |> add_option_bool(username, "username")
 }
 
 pub fn new_forms(command: List(String)) -> List(String) {
@@ -290,15 +294,15 @@ pub fn new_forms(command: List(String)) -> List(String) {
 }
 
 pub fn add_entry(command: List(String), entry: String) -> List(String) {
-   add_opt(command, Some(entry), "add-entry")
+   add_option(command, Some(entry), "add-entry")
 }
 
 pub fn add_password(command: List(String), password: String) -> List(String) {
-   add_opt(command, Some(password), "add-password")
+   add_option(command, Some(password), "add-password")
 }
 
 pub fn add_calendar(command: List(String), calendar: String) -> List(String) {
-   add_opt(command, Some(calendar), "add-calendar")
+   add_option(command, Some(calendar), "add-calendar")
 }
 
 pub fn add_combo_and_values(
@@ -307,8 +311,8 @@ pub fn add_combo_and_values(
    values values: List(String),
 ) -> List(String) {
    command
-   |> add_opt(Some(combo), "add-combo")
-   |> add_opt(Some(string.join(values, "|")), "combo-values")
+   |> add_option(Some(combo), "add-combo")
+   |> add_option(Some(string.join(values, "|")), "combo-values")
 }
 
 pub fn add_list_and_values(
@@ -318,13 +322,13 @@ pub fn add_list_and_values(
    column_values column_values: Option(List(String)),
 ) -> List(String) {
    command
-   |> add_opt(Some(list_name), "add-list")
-   |> add_opt(Some(string.join(values, "|")), "list-values")
-   |> add_opt_list(column_values, "column-values")
+   |> add_option(Some(list_name), "add-list")
+   |> add_option(Some(string.join(values, "|")), "list-values")
+   |> add_option_list(column_values, "column-values")
 }
 
 pub fn set_separator(command: List(String), separator: String) -> List(String) {
-   add_opt(command, Some(separator), "separator")
+   add_option(command, Some(separator), "separator")
 }
 
 pub fn set_show_header(command: List(String)) -> List(String) {
@@ -335,7 +339,7 @@ pub fn set_forms_date_format(
    command: List(String),
    format: String,
 ) -> List(String) {
-   add_opt(command, Some(format), "forms-date-format")
+   add_option(command, Some(format), "forms-date-format")
 }
 
 pub fn add_value(command: List(String), value: String) -> List(String) {
@@ -353,7 +357,16 @@ pub fn add_value_if(
    }
 }
 
+@deprecated("Use `add_option()` instead.")
 pub fn add_opt(
+   command: List(String),
+   opt: Option(String),
+   str: String,
+) -> List(String) {
+   add_option(command, opt, str)
+}
+
+pub fn add_option(
    command: List(String),
    opt: Option(String),
    str: String,
@@ -364,19 +377,38 @@ pub fn add_opt(
    }
 }
 
+@deprecated("Use `add_option_if()` instead.")
 pub fn add_opt_if(
    command: List(String),
    condition: Bool,
    opt: String,
    str: String,
 ) -> List(String) {
+   add_option_if(command, condition, opt, str)
+}
+
+pub fn add_option_if(
+   command: List(String),
+   condition: Bool,
+   opt: String,
+   str: String,
+) -> List(String) {
    case condition {
-      True -> add_opt(command, Some(opt), str)
+      True -> add_option(command, Some(opt), str)
       False -> command
    }
 }
 
+@deprecated("Use `add_option_int()` instead.")
 pub fn add_opt_int(
+   command: List(String),
+   opt: Option(Int),
+   str: String,
+) -> List(String) {
+   add_option_int(command, opt, str)
+}
+
+pub fn add_option_int(
    command: List(String),
    opt: Option(Int),
    str: String,
@@ -387,7 +419,16 @@ pub fn add_opt_int(
    }
 }
 
+@deprecated("Use `add_option_list()` instead.")
 pub fn add_opt_list(
+   command: List(String),
+   opt_list: Option(List(String)),
+   str: String,
+) -> List(String) {
+   add_option_list(command, opt_list, str)
+}
+
+pub fn add_option_list(
    command: List(String),
    opt_list: Option(List(String)),
    str: String,
@@ -398,7 +439,16 @@ pub fn add_opt_list(
    }
 }
 
+@deprecated("Use `add_option_bool()` instead.")
 pub fn add_bool(
+   command: List(String),
+   condition: Bool,
+   str: String,
+) -> List(String) {
+   add_option_bool(command, condition, str)
+}
+
+pub fn add_option_bool(
    command: List(String),
    condition: Bool,
    str: String,
@@ -409,18 +459,25 @@ pub fn add_bool(
    }
 }
 
+@internal
+pub fn do_parse(str: String) -> String {
+   case string.ends_with(str, "\n") {
+      True -> string.slice(str, 0, string.length(str) - 1)
+      False -> str
+   }
+}
+
+@deprecated("Use `prompt()` instead of `show()`.")
 pub fn parse(str: String) -> String {
-   str
-   |> string.trim_right
+   do_parse(str)
 }
 
+@deprecated("Use `string.split(prompt())` instead.")
 pub fn parse_list(str: String, separator: String) -> List(String) {
-   str
-   |> string.trim_right
-   |> string.split(separator)
+   string.split(do_parse(str), separator)
 }
 
-@deprecated("Use `show` instead.")
+@deprecated("Use `show()` instead.")
 pub fn run(command: List(String), errors errors: Bool) -> Option(#(Int, String)) {
    let opts = case errors {
       True -> []
@@ -440,6 +497,7 @@ pub fn run(command: List(String), errors errors: Bool) -> Option(#(Int, String))
    }
 }
 
+/// Same as `show_in(".")`
 pub fn show(command: List(String), err capture_errors: Bool) -> GuResult {
    show_in(command, ".", capture_errors)
 }
@@ -456,10 +514,24 @@ pub fn show_in(
    case list.reverse(command) {
       [run, ..with] ->
          shellout.command(run: run, with: with, in: in_dir, opt: opts)
-      _ -> panic
+      _ -> Error(#(-1, "Array length is too short"))
    }
 }
 
+/// Same as `show(err: False)`, but trims the last newline from the result
+pub fn prompt(command: List(String)) -> GuResult {
+   prompt_in(command, ".")
+}
+
+/// Same as `show_in(err: False)`, but trims the last newline from the result
+pub fn prompt_in(command: List(String), in_dir: String) -> GuResult {
+   case show_in(command, in_dir, False) {
+      Ok(val) -> Ok(do_parse(val))
+      Error(err) -> Error(#(err.0, do_parse(err.1)))
+   }
+}
+
+/// Same as `shellout.exit`
 pub fn exit(status: Int) -> Nil {
    shellout.exit(status)
 }

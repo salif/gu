@@ -1,4 +1,5 @@
 import gleam/option.{Some}
+import gleam/result
 import gu
 
 pub fn main() {
@@ -10,12 +11,8 @@ pub fn main() {
          hide_text: False,
       )
       |> gu.set_title("Entry")
-      |> gu.show(err: False)
-
-   let answer = case answer {
-      Ok(val) -> gu.parse(val)
-      Error(_) -> "No answer"
-   }
+      |> gu.prompt()
+      |> result.unwrap("No answer")
 
    gu.zenity
    |> gu.new_info()

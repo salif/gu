@@ -8,22 +8,21 @@ gleam add gu
 ```
 ```gleam
 import gleam/option.{None, Some}
+import gleam/result
 import gu
 
 pub fn main() {
-   let demo =
+   let name =
       gu.zenity
-      |> gu.set_title("Demo")
       |> gu.new_entry(
          text: Some("What's Your Name?"),
          entry_text: None,
          hide_text: False,
       )
-      |> gu.show(err: False)
-   let name = case demo {
-      Ok(val) -> gu.parse(val)
-      Error(_) -> "Unknown"
-   }
+      |> gu.set_title("Demo")
+      |> gu.prompt()
+      |> result.unwrap("Unknown")
+
    gu.zenity
    |> gu.new_info()
    |> gu.set_title("Demo")

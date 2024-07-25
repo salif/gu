@@ -1,4 +1,5 @@
 import gleam/option.{None, Some}
+import gleam/result
 import gu
 
 pub fn main() {
@@ -12,18 +13,12 @@ pub fn main() {
          date_format: None,
       )
       |> gu.set_title("Calendar")
-      |> gu.show(err: False)
+      |> gu.prompt()
+      |> result.unwrap("No date selected")
 
-   case answer {
-      Ok(val) -> {
-         let _ =
-            gu.zenity
-            |> gu.new_info()
-            |> gu.set_text(gu.parse(val))
-            |> gu.set_timeout(10)
-            |> gu.show(True)
-         Nil
-      }
-      Error(_) -> Nil
-   }
+   gu.zenity
+   |> gu.new_info()
+   |> gu.set_text(answer)
+   |> gu.set_timeout(10)
+   |> gu.show(True)
 }

@@ -1,31 +1,28 @@
 import gleam/option.{None, Some}
+import gleam/result
 import gleam/string
 import gu
 
 pub fn main() {
-   let answer =
-      gu.zenity
-      |> gu.new_file_selection(
-         filename: None,
-         multiple: True,
-         directory: False,
-         save: False,
-         separator: Some("|"),
-         file_filter: Some(["*.gleam"]),
-      )
-      |> gu.set_title("Select Gleam Files")
-      |> gu.show(err: False)
-
-   let answer = case answer {
-      Ok(val) ->
-         gu.parse_list(val, "|")
-         |> string.join(",\n")
-      Error(_) -> "No files selected"
-   }
-
    gu.zenity
-   |> gu.new_info()
-   |> gu.set_text(answer)
-   |> gu.set_timeout(10)
-   |> gu.show(True)
+   |> gu.new_file_selection(
+      filename: None,
+      multiple: True,
+      directory: False,
+      save: False,
+      separator: Some("|"),
+      file_filter: Some(["*.gleam"]),
+   )
+   |> gu.set_title("Select Gleam Files")
+   |> gu.prompt()
+   |> result.map(string.split(_, "|"))
+   |> result.map(string.join(_, ",\n"))
+   |> result.unwrap("No files selected")
+   |> fn(answer: String) {
+      gu.zenity
+      |> gu.new_info()
+      |> gu.set_text(answer)
+      |> gu.set_timeout(10)
+      |> gu.show(True)
+   }
 }
